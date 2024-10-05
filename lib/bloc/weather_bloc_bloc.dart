@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,8 +11,8 @@ class WeatherBlocBloc extends Bloc<WeatherBlocEvent, WeatherBlocState> {
   WeatherBlocBloc() : super(WeatherBlocInitial()) {
     on<FetchWeather>((event, emit) async {
       try {
-        final String API = dotenv.env['APIKEY'] ?? '';
         emit(WeatherBlocLoading());
+        final String API = dotenv.env['APIKEY'] ?? '';
 
         WeatherFactory wf = WeatherFactory(API, language: Language.ENGLISH);
 
@@ -22,10 +20,6 @@ class WeatherBlocBloc extends Bloc<WeatherBlocEvent, WeatherBlocState> {
           event.position.latitude,
           event.position.longitude,
         );
-
-        log('yha taok');
-        log(weather.toString());
-        log('yha taok2');
         emit(WeatherBlocSuccess(weather: weather));
       } catch (err) {
         emit(WeatherBlocFailure());
